@@ -1,0 +1,18 @@
+- hosts: localhost
+  vars:
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
+  tasks:
+#    - assert:
+#        that:
+#          - version is defined
+    - name: deploy nginx-hello
+      community.kubernetes.helm:
+        host: "{{ kuber_cluster.api_endpoint }}"
+        api_key: "{{ kuber_cluster.api_key }}"
+        release_namespace: "{{ kuber_cluster.namespace }}"
+        release_name: "{{ apps.nginx_hello.release }}"
+        chart_ref: files/helm-charts/nginx-hello
+        #release_state: absent
+        release_state: present
+        release_values: "{{ lookup('template', 'nginx-hello/values.yml') | from_yaml }}"
+        verify_ssl: no
