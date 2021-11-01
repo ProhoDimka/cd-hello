@@ -12,7 +12,8 @@ kubectl get pods --all-namespaces
 kubectl create namespace interview-test --dry-run=none
 kubectl config set-context --current --namespace=interview-test
 kubectl create serviceaccount dima-dev
-kubectl create rolebinding dima-dev-admin --clusterrole=admin --serviceaccount=interview-test:dima-dev
+kubectl create role admin-ns --verb=\* --resource=\*
+kubectl create rolebinding dima-dev-admin-ns --role=admin-ns --serviceaccount=interview-test:dima-dev
 kubectl create clusterrolebinding dima-dev-cluster-admin --clusterrole=admin --serviceaccount=interview-test:dima-dev
 kubectl describe clusterrolebinding sa dima-dev
 kubectl get secret --namespace=interview-test
@@ -21,3 +22,10 @@ kubectl describe secret dima-dev-token-8x66c
 
 kubectl get HorizontalPodAutoscaler -o yaml
 kubectl get deployment -o yaml
+
+kubectl get rolebinding
+kubectl get rolebinding -o yaml
+kubectl get clusterrolebinding
+
+kubectl delete rolebinding dima-dev-admin
+kubectl delete clusterrolebinding dima-dev-cluster-admin
